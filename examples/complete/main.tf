@@ -20,7 +20,7 @@ locals {
   zone_id_2 = data.alicloud_zones.default.zones[0].id
 }
 
-# Call the serverless-ha module
+# Call the serverless-high-availability module
 module "serverless_ha" {
   source = "../../"
 
@@ -177,7 +177,7 @@ module "serverless_ha" {
   ]
 
   common_tags = {
-    Project = "serverless-ha"
+    Project = "serverless-high-availability"
     Owner   = "terraform"
   }
 }

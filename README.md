@@ -1,10 +1,8 @@
 Alicloud Serverless High Availability Architecture Terraform Module
 
-================================================ 
+# terraform-alicloud-serverless-high-availability
 
-# terraform-alicloud-serverless-ha
-
-English | [简体中文](https://github.com/alibabacloud-automation/terraform-alicloud-serverless-ha/blob/main/README-CN.md)
+English | [简体中文](https://github.com/alibabacloud-automation/terraform-alicloud-serverless-high-availability/blob/main/README-CN.md)
 
 This Terraform module creates a complete serverless high availability architecture on Alibaba Cloud. The module implements the [Minimal Operations, Serverless High Availability Architecture](https://www.aliyun.com/solution/tech-solution/serverless-ha) solution, which provides an efficient and scalable serverless infrastructure with automatic scaling capabilities, high availability across multiple zones, and comprehensive monitoring.
 
@@ -32,7 +30,7 @@ data "alicloud_polardb_node_classes" "default" {
 }
 
 module "serverless_ha" {
-  source = "alibabacloud-automation/serverless-ha/alicloud"
+  source = "alibabacloud-automation/serverless-high-availability/alicloud"
 
   vpc_config = {
     cidr_block = "192.168.0.0/16"
@@ -75,22 +73,13 @@ module "serverless_ha" {
     vswitch_keys = ["web_01", "web_02"]
   }
 
-  alb_zone_mappings = [
-    {
-      zone_id     = data.alicloud_zones.default.zones[0].id
-      vswitch_key = "web_01"
-    },
-    {
-      zone_id     = data.alicloud_zones.default.zones[1].id
-      vswitch_key = "web_02"
-    }
-  ]
+  alb_zone_mappings = ["web_01", "web_02"]
 }
 ```
 
 ## Examples
 
-* [Complete Example](https://github.com/alibabacloud-automation/terraform-alicloud-serverless-ha/tree/main/examples/complete)
+* [Complete Example](https://github.com/alibabacloud-automation/terraform-alicloud-serverless-high-availability/tree/main/examples/complete)
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
@@ -133,7 +122,7 @@ No modules.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_alb_config"></a> [alb\_config](#input\_alb\_config) | Application Load Balancer configuration. | <pre>object({<br/>    load_balancer_name     = optional(string, "serverless-alb")<br/>    load_balancer_edition  = optional(string, "Basic")<br/>    address_type           = optional(string, "Internet")<br/>    address_allocated_mode = optional(string, "Fixed")<br/>    pay_type               = optional(string, "PayAsYouGo")<br/>  })</pre> | `{}` | no |
-| <a name="input_alb_zone_mappings"></a> [alb\_zone\_mappings](#input\_alb\_zone\_mappings) | ALB zone mappings configuration. Each mapping requires 'zone\_id' and 'vswitch\_key'. | <pre>list(object({<br/>    zone_id     = string<br/>    vswitch_key = string<br/>  }))</pre> | n/a | yes |
+| <a name="input_alb_zone_mappings"></a> [alb\_zone\_mappings](#input\_alb\_zone\_mappings) | ALB zone mappings configuration. List of vswitch keys for zone mappings. | `list(string)` | n/a | yes |
 | <a name="input_common_tags"></a> [common\_tags](#input\_common\_tags) | Common tags to be applied to all resources | `map(string)` | `{}` | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | Environment name (e.g., dev, staging, prod) | `string` | `"dev"` | no |
 | <a name="input_polardb_account_config"></a> [polardb\_account\_config](#input\_polardb\_account\_config) | PolarDB account configuration. The attributes 'account\_name' and 'account\_password' are required. | <pre>object({<br/>    account_name     = string<br/>    account_password = string<br/>    account_type     = optional(string, "Normal")<br/>  })</pre> | n/a | yes |

@@ -1,21 +1,8 @@
-
-# Merge common tags with custom tags
-locals {
-  merged_tags = merge(
-    var.common_tags,
-    {
-      Environment = var.environment
-      ManagedBy   = "Terraform"
-      Module      = "serverless-ha"
-    }
-  )
-}
-
 # Create VPC
 resource "alicloud_vpc" "main" {
   vpc_name   = var.vpc_config.vpc_name
   cidr_block = var.vpc_config.cidr_block
-  tags       = local.merged_tags
+  tags       = var.common_tags
 }
 
 # Create VSwitches with for_each
@@ -26,7 +13,7 @@ resource "alicloud_vswitch" "vswitches" {
   cidr_block   = each.value.cidr_block
   zone_id      = each.value.zone_id
   vswitch_name = each.value.vswitch_name
-  tags         = local.merged_tags
+  tags         = var.common_tags
 }
 
 # Create Security Group
@@ -34,7 +21,7 @@ resource "alicloud_security_group" "main" {
   security_group_name = var.security_group_config.security_group_name
   vpc_id              = alicloud_vpc.main.id
   description         = var.security_group_config.description
-  tags                = local.merged_tags
+  tags                = var.common_tags
 }
 
 # Create Security Group Rules with for_each
@@ -66,7 +53,7 @@ resource "alicloud_polardb_cluster" "main" {
   scale_ro_num_max = var.polardb_config.scale_ro_num_max
 
   description = var.polardb_config.description
-  tags        = local.merged_tags
+  tags        = var.common_tags
 
   lifecycle {
     ignore_changes = [allow_shut_down]
@@ -204,7 +191,7 @@ resource "alicloud_sae_application" "main" {
     }
   }
 
-  tags = local.merged_tags
+  tags = var.common_tags
 
   lifecycle {
     ignore_changes = [envs]

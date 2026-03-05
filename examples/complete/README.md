@@ -1,6 +1,6 @@
 # Complete Example
 
-This example demonstrates how to use the serverless-ha module to deploy a complete serverless high availability architecture on Alibaba Cloud.
+This example demonstrates how to use the serverless-high-availability module to deploy a complete serverless high availability architecture on Alibaba Cloud.
 
 ## Architecture
 
@@ -19,13 +19,7 @@ This example creates:
 
 ## Usage
 
-1. Set the required variables:
-
-```bash
-export TF_VAR_db_password="YourSecurePassword123!"
-```
-
-2. Initialize and apply:
+To run this example, you need to execute:
 
 ```bash
 terraform init
@@ -33,24 +27,8 @@ terraform plan
 terraform apply
 ```
 
-## Variables
+Note that this example may create resources which cost money. Run `terraform destroy` when you don't need these resources.
 
-| Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
-| common_name | Common name prefix for all resources | string | "serverless" | no |
-| environment | Environment name | string | "dev" | no |
-| db_user_name | MySQL database account name | string | "applets" | no |
-| db_password | MySQL database password | string | n/a | yes |
-
-## Outputs
-
-| Name | Description |
-|------|-------------|
-| web_url | Web access URL |
-| vpc_id | VPC ID |
-| polardb_cluster_id | PolarDB cluster ID |
-| alb_dns_name | ALB DNS name |
-| sae_application_id | SAE application ID |
 
 ## Notes
 
@@ -59,7 +37,9 @@ terraform apply
 - The example uses serverless PolarDB with auto-scaling from 1-16 PCUs
 - Health checks are configured for both readiness and liveness probes
 
-## Clean Up
+## Destroy
+
+To destroy the infrastructure when you're done:
 
 ```bash
 terraform destroy
